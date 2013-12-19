@@ -1,0 +1,5 @@
+check process <%= app.name %>_unicorn_worker_<%= @worker_id %>
+with pidfile <%= app.run_path %>/unicorn.<%= @worker_id %>.pid
+stop program = "<%= app_init :kill_worker, @worker_id %>"
+mode passive
+group <%= app.name %>

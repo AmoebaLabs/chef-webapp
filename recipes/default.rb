@@ -1,8 +1,3 @@
-#
-# Cookbook Name:: webapp
-# Recipe:: default
-#
-# Copyright 2013, YOUR_COMPANY_NAME
-#
-# All rights reserved - Do Not Redistribute
-#
+%w( capistrano javascript rvm db nginx unicorn ssh init foreman cron resque ).map do |r|
+  include_recipe "app::#{r}"
+end

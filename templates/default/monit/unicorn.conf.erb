@@ -1,0 +1,6 @@
+check process <%= app.name %>_unicorn
+with pidfile <%= app.run_path %>/unicorn.pid
+start program = "<%= app_init :upgrade %>"
+stop  program = "<%= app_init :stop %>"
+if failed unixsocket <%= app.socket %> then start
+group <%= app.name %>
