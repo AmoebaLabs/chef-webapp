@@ -8,3 +8,6 @@ end
 appdefs.redirect_urls = []
 appdefs.alias_urls = []
 appdefs.url = node.fqdn
+
+node.override['nginx']['user'] = 'nobody'
+node.override['nginx']['group'] = 'nogroup'

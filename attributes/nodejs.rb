@@ -1,1 +1,1 @@
-default.nodejs.install_method = 'package'
+override.nodejs.install_method = 'package'

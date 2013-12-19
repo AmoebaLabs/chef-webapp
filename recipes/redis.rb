@@ -1,6 +1,9 @@
-# TODO Include other recipies from role
+include_attribute "webapp::redis"
 
-include_recipe 'redisio::enable'
+%w(redisio::install redisio::enable).each do |r|
+  include_recipe r
+end
+
 redis_commands = service_commands("redis#{app.name}")
 
 link "#{app.run_path}/redis.sock" do

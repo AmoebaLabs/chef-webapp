@@ -1,4 +1,6 @@
-# site nginx config which goes into sites-available/
+include_attribute "webapp::nginx"
+include_recipe "nginx"
+
 if ((!app.include?(:web_workers) || app.web_workers == true))
   service "nginx" do
     action :start
@@ -12,6 +14,7 @@ else
   end
 end
 
+# site nginx config which goes into sites-available/
 template "#{node[:nginx][:dir]}/sites-available/#{app.name}.conf" do
   source "nginx.site.conf.erb"
   notifies :reload, resources(:service => "nginx")

@@ -15,7 +15,6 @@ appdefs.init_path       = "#{app.shared_path}/init"
 appdefs.init_script     = "#{app.init_path}/#{app.name}"
 appdefs.capfile         = "#{app.config_path}/Capfile"
 appdefs.procfile        = "#{app.config_path}/Procfile"
-appdefs.envfile         = "#{app.config_path}/env.site"
 
 # NOTE: Cannot set to 'false' if you try to use any app stuff in unicorn.rb
 appdefs.preload         = true
@@ -28,4 +27,4 @@ appdefs.repo            = repo
 appdefs.branch          = branch || 'master'
 appdefs.ci              = nil
 
-%w( db jenkins nginx rvm nodejs env cron ).map {|a| include_attribute "app::#{a}"}
+%w( env cron ).map {|a| include_attribute "webapp::#{a}"}
