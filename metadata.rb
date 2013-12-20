@@ -9,7 +9,6 @@ version          "0.1.0"
 recipe           "webapp", "Default webapp recipe"
 
 depends 'nginx'
-depends 'capistrano'
 depends 'nodejs'
 depends 'postgresql'
 depends 'redisio'
