@@ -1,4 +1,6 @@
-if (!app.include?(:web_workers) || app.web_workers == true)
+if app.unicorn_enabled
+  include_recipe 'unicorn'
+
   monitrc "#{app.name}_unicorn" do
     template_source   "monit/unicorn.conf.erb"
     template_cookbook "app"

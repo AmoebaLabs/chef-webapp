@@ -19,6 +19,17 @@ appdefs.procfile        = "#{app.config_path}/Procfile"
 # NOTE: Cannot set to 'false' if you try to use any app stuff in unicorn.rb
 appdefs.preload         = true
 
+# This attribute controls if we should start the web server
+appdefs.web_enabled       = true
+
+# Note that passenger and unicorn are mutually exclusive
+appdefs.unicorn_enabled   = false
+appdefs.passenger_enabled = true
+
+# Foreman support (will start & monitor foreman)
+appdefs.foreman_enabled   = false
+
+# Unicorn/Passenger options (not all apply to both):
 appdefs.workers         = 2
 appdefs.socket          = "#{app.run_path}/#{app.name}.socket"
 
@@ -27,4 +38,5 @@ appdefs.repo            = repo
 appdefs.branch          = branch || 'master'
 appdefs.ci              = nil
 
-%w( env cron ).map {|a| include_attribute "webapp::#{a}"}
+# RVM should be last so we capture all the necessary gems
+%w( cron db env nginx nodejs unicorn rvm ).map {|a| include_attribute "webapp::#{a}"}

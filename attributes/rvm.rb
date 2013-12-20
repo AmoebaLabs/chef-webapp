@@ -1,5 +1,7 @@
+appdefs.gems = %w( bundler rake )
+node.default[:packages] = %w( qt4-qmake libqt4-dev )
+
 appdefs.ruby_version = '1.9.3'
-appdefs.gems = []
 override.rvm.user_installs = [{
   'user'          => app.user.name,
   'home'          => app.user.home,

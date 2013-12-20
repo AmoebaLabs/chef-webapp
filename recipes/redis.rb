@@ -1,5 +1,3 @@
-include_attribute "webapp::redis"
-
 %w(redisio::install redisio::enable).each do |r|
   include_recipe r
 end

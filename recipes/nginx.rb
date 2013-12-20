@@ -1,7 +1,6 @@
-include_attribute "webapp::nginx"
 include_recipe "nginx"
 
-if ((!app.include?(:web_workers) || app.web_workers == true))
+if app.web_enabled
   service "nginx" do
     action :start
   end

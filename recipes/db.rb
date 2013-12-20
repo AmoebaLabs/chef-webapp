@@ -1,6 +1,4 @@
 if app.database
-  include_attribute "webapp::db"
-
   db_conf = Hash[app.database]
   db_conf.delete 'environments'
   db_conf['database'] = db_conf.delete 'name'
