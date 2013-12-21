@@ -10,7 +10,7 @@ user app.user.name do
   supports  :manage_home => true
 end
 
-%w(nginx rvm capistrano cron db ).each do |r|
+%w( nginx rvm capistrano cron db ).each do |r|
   include_recipe "webapp::#{r}"
 end
 
