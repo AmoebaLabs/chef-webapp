@@ -8,13 +8,13 @@ version          "0.1.0"
 
 recipe           "webapp", "Default webapp recipe"
 
-depends 'nginx'
+depends 'nginx', '>= 2.2.0'
 depends 'nodejs'
 depends 'postgresql'
 depends 'redisio'
 
 # Note: These deps come from Github, and must be imported
 # via your Cheffile
-depends 'rvm'
+depends 'rvm', '>= 0.8.0'
 depends 'unicorn'
 depends 'monit'

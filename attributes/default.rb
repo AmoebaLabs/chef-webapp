@@ -39,5 +39,7 @@ appdefs.repo            = repo
 appdefs.branch          = branch || 'master'
 appdefs.ci              = nil
 
-# RVM should be last so we capture all the necessary gems
-%w( cron db env nginx nodejs unicorn rvm ).map {|a| include_attribute "webapp::#{a}"}
+appdefs.env_vars = {
+  'RAILS_ENV' => app.environment,
+  'DEFAULT_HOST' => app.url
+}
