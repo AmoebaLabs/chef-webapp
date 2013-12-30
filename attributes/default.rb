@@ -24,7 +24,7 @@ appdefs.preload         = true
 appdefs.web_enabled       = true
 
 # Note that passenger and unicorn are mutually exclusive
-appdefs.unicorn_enabled   = false
+#appdefs.unicorn_enabled   = false # Future
 appdefs.passenger_enabled = true
 
 # Foreman support (will start & monitor foreman)

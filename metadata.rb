@@ -16,5 +16,4 @@ depends 'redisio'
 # Note: These deps come from Github, and must be imported
 # via your Cheffile
 depends 'rvm', '>= 0.8.0'
-depends 'unicorn'
-depends 'monit'
+depends 'monit', '>= 1.5.0'
