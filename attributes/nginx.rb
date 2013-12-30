@@ -15,7 +15,8 @@ default[:webapp][:nginx][:prefix] = '/usr/local'
 default[:webapp][:nginx][:dir] = '/etc/nginx'
 default[:webapp][:nginx][:log_dir] = '/var/log/nginx'
 default[:webapp][:nginx][:version] = '1.4.4'
-default[:webapp][:nginx][:checksum] = '7c989a58e5408c9593da0bebcd0e4ffc3d892d1316ba5042ddb0be5b0b4102b9'
+# You'll want to set this to avoid re-downloading files (this is correct for version above):
+default[:webapp][:nginx][:checksum] = '7c989a58e540'
 default[:webapp][:nginx][:configure_flags] = []
 
 # Override these attributes in the nginx cookbook (override in your node via node[:webapp])
