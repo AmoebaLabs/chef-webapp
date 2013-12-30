@@ -1,3 +1,7 @@
+node[:webapp][:rvm][:common_pkgs].each do |p|
+  package p
+end
+
 node.override.rvm.user_installs = [{
   'user'          => app.user.name,
   'home'          => app.user.home,

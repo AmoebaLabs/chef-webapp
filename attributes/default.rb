@@ -24,11 +24,11 @@ appdefs.preload         = true
 appdefs.web_enabled       = true
 
 # Note that passenger and unicorn are mutually exclusive
-#appdefs.unicorn_enabled   = false # Future
+appdefs.unicorn_enabled   = false # Future TODO
 appdefs.passenger_enabled = true
 
 # Foreman support (will start & monitor foreman)
-appdefs.foreman_enabled   = false
+appdefs.foreman_enabled   = false # Future TODO
 
 # Unicorn/Passenger options (not all apply to both):
 appdefs.workers         = 2
