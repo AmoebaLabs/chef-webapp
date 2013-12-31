@@ -6,8 +6,8 @@ user app.user.name do
   supports  :manage_home => true
 end
 
-# This looks silly but is serious. We want passenger included first, if it is
-# so the module can be included when nginx compiles
+# This looks silly but is serious. We want passenger included first, if it is included at all
+# so the module can be included before nginx compiles
 if node.run_list.recipes.include?('webapp::passenger')
   include_recipe 'webapp::passenger'
 end

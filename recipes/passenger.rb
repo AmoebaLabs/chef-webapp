@@ -10,11 +10,11 @@ rvm_gem 'passenger' do
   version     node[:webapp][:passenger][:version]
 end
 
-# TODO: Add this
-#template "#{node["nginx"]["dir"]}/conf.d/passenger.conf" do
-#  source 'modules/passenger.conf.erb'
-#  owner  'root'
-#  group  'root'
-#  mode   '0644'
-#  notifies :reload, 'service[nginx]'
-#end
+template "#{node["nginx"]["dir"]}/conf.d/passenger.conf" do
+  source 'modules/passenger.conf.erb'
+  cookbook 'nginx'
+  owner  'root'
+  group  'root'
+  mode   '0644'
+  notifies :reload, 'service[nginx]'
+end

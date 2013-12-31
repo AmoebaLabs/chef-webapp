@@ -9,6 +9,15 @@ Requirements
 ------------
 Currently this is tested and works on Ubuntu 12.04 Server.
 
+You must add the following to your Cookbooks manager. For Librarian Chef you can add the following
+to your `Cheffile`:
+
+```
+cookbook 'rvm',     github: 'fnichol/chef-rvm'
+cookbook 'monit',   github: 'phlipper/chef-monit'
+cookbook 'nginx',   github: ''
+```
+
 
 Attributes
 ----------
