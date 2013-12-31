@@ -13,6 +13,11 @@ else
   end
 end
 
+# Can't force ssl w/o ssl
+if app.force_ssl && !app.ssl
+  raise "Can't force_ssl in your application if ssl is not enabled!"
+end
+
 # site nginx config which goes into sites-available/
 template "#{node[:nginx][:dir]}/sites-available/#{app.name}.conf" do
   source "nginx.site.conf.erb"

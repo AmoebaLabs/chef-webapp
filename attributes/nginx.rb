@@ -1,4 +1,5 @@
 appdefs.ssl = false
+appdefs.force_ssl = false
 
 if app[:http_auth]
   appdefs.http_auth.realm   = "/"
@@ -8,6 +9,8 @@ end
 appdefs.redirect_urls = []
 appdefs.alias_urls = []
 appdefs.url = node.fqdn
+
+appdefs[:nginx][:keepalive_timeout] = 65
 
 default[:webapp][:nginx][:user] = 'nobody'
 default[:webapp][:nginx][:group] = 'nogroup'

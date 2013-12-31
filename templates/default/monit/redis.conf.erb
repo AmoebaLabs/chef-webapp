@@ -1,3 +1,7 @@
+## NOTE: THIS FILE IS MANAGED BY CHEF. CHANGES TO THIS FILE WILL BE REMOVED THE NEXT CHEF RUN. IF
+#  YOU WISH TO MAKE A MODIFICATION, YOU SHOULD DO SO IN THE CHEF KITCHEN FOR THIS SERVER AND RUN:
+#  `amoeba node push --node <%= node[:name] %>`
+
 check process <%= @process_name %>
 with pidfile <%= app.redis.pidfile %>
 start program = "<%= @start_command %>" with timeout 60 seconds

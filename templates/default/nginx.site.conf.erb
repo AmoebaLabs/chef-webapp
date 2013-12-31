@@ -1,69 +1,96 @@
-#TODO Fix for passenger
+## NOTE: THIS FILE IS MANAGED BY CHEF. CHANGES TO THIS FILE WILL BE REMOVED THE NEXT CHEF RUN. IF
+#  YOU WISH TO MAKE A MODIFICATION, YOU SHOULD DO SO IN THE CHEF KITCHEN FOR THIS SERVER AND RUN:
+#  `amoeba node push --node <%= node[:name] %>`
 
+<% if app[:unicorn_enabled] %>
 # Listen on Application Socket
-upstream <%= app.name %> {
-server unix:<%= app.socket %> fail_timeout=0;
+upstream <%= app[:name] %> {
+  server unix:<%= app[:socket] %> fail_timeout=0;
 }
+<% end %>
 
+<% if app.redirect_urls.length > 0 %>
 # Redirect URL Aliases
 <% app.redirect_urls.each do |url| %>
-  server {
+server {
   listen        80;
   server_name   <%= url %>;
-  return        301 http://<%= app.url %>$request_uri;
-  }
+  return  301   http://<%= app.url %>$request_uri;
+}
+<% end; end %>
+
+<% if node[:application][:force_ssl] %>
+# Force SSL for this application
+server {
+  server_name <%= app.url %>;
+  listen       80;
+  return  301  https://$host$request_uri;
+}
 <% end %>
 
 # Serve Application
 server {
-listen 80;
-# Main URL
-server_name <%= app.url %>;
+  <% if app[:passenger_enabled] %>
+  # Application Server Config (Passenger)
+  passenger_ruby    <%= node[:application][:ruby_version] %>;
+  passenger_app_env <%= node[:application][:environment] %>;
+  <% end %>
 
-# Alias URLs
-<% app.alias_urls.each do |url| %>
+  # Some sensible defaults for a Web Application server
+  listen            80;
+  underscores_in_headers on;
+  sendfile          on;
+  gzip              on;
+  keepalive_timeout <%= node[:application][:nginx][:keepalive_timeout] %>;
+
+  # Main URL
+  server_name <%= app.url %>;
+
+  # Alias URLs
+  <% app.alias_urls.each do |url| %>
   server_name <%= url %>;
-<% end %>
+  <% end %>
 
-<% if app.ssl %>
+  <% if app.ssl %>
+  # Also some SSL directives:
   listen 443 ssl;
   ssl_certificate <%= app.ssl.certificate %>;
   ssl_certificate_key <%= app.ssl.key %>;
-<% end %>
+  <% end %>
 
-# Serve static files
-root <%= app.static_path %>;
+  # Serve static files
+  root <%= app.static_path %>;
 
-# Error pages
-error_page 500 502 503 504 /500.html;
-error_page 422 /422.html;
-error_page 404 /404.html;
+  # Error pages
+  error_page 500 502 503 504 /500.html;
+  error_page 422 /422.html;
+  error_page 404 /404.html;
 
-location / {
-try_files $uri @app;
-}
+  location / {
+  try_files $uri @app;
+  }
 
-# Proxy to app via unix socket
-location @app {
-proxy_pass http://<%= app.name %>;
-proxy_redirect off;
+  # Proxy to app via unix socket
+  location @app {
+  proxy_pass http://<%= app.name %>;
+  proxy_redirect off;
 
-proxy_set_header Host               $host;
-proxy_set_header X-Real-IP          $remote_addr;
-proxy_set_header X-Forwarded-For    $proxy_add_x_forwarded_for;
-proxy_set_header X-Forwarded-Proto  $scheme;
+  proxy_set_header Host               $host;
+  proxy_set_header X-Real-IP          $remote_addr;
+  proxy_set_header X-Forwarded-For    $proxy_add_x_forwarded_for;
+  proxy_set_header X-Forwarded-Proto  $scheme;
 
-client_max_body_size       10m;
-client_body_buffer_size    128k;
+  client_max_body_size       10m;
+  client_body_buffer_size    128k;
 
-proxy_connect_timeout      90;
-proxy_send_timeout         90;
-proxy_read_timeout         90;
+  proxy_connect_timeout      90;
+  proxy_send_timeout         90;
+  proxy_read_timeout         90;
 
-proxy_buffer_size          4k;
-proxy_buffers              4 32k;
-proxy_busy_buffers_size    64k;
-proxy_temp_file_write_size 64k;
+  proxy_buffer_size          4k;
+  proxy_buffers              4 32k;
+  proxy_busy_buffers_size    64k;
+  proxy_temp_file_write_size 64k;
 
 }
 

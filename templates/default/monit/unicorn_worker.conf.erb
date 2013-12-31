@@ -1,3 +1,7 @@
+## NOTE: THIS FILE IS MANAGED BY CHEF. CHANGES TO THIS FILE WILL BE REMOVED THE NEXT CHEF RUN. IF
+#  YOU WISH TO MAKE A MODIFICATION, YOU SHOULD DO SO IN THE CHEF KITCHEN FOR THIS SERVER AND RUN:
+#  `amoeba node push --node <%= node[:name] %>`
+
 check process <%= app.name %>_unicorn_worker_<%= @worker_id %>
 with pidfile <%= app.run_path %>/unicorn.<%= @worker_id %>.pid
 stop program = "<%= app_init :kill_worker, @worker_id %>"
