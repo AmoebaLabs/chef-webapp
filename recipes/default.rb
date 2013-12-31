@@ -6,7 +6,13 @@ user app.user.name do
   supports  :manage_home => true
 end
 
-%w( nginx rvm capistrano cron db ).each do |r|
+# This looks silly but is serious. We want passenger included first, if it is
+# so the module can be included when nginx compiles
+if node.run_list.recipes.include?('webapp::passenger')
+  include_recipe 'webapp::passenger'
+end
+
+%w( rvm nginx capistrano cron db ).each do |r|
   include_recipe "webapp::#{r}"
 end
 

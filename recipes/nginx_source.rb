@@ -41,6 +41,9 @@ cookbook_file "#{node['nginx']['dir']}/mime.types" do
   notifies :reload, 'service[nginx]'
 end
 
+# TODO: Remove (temp)
+log "About to configure NGINXYO w/ flags: #{node.run_state['nginx_configure_flags'].join(', ')}"
+
 # Unpack downloaded source so we could apply nginx patches
 # in custom modules - example http://yaoweibin.github.io/nginx_tcp_proxy_module/
 # patch -p1 < /path/to/nginx_tcp_proxy_module/tcp.patch
@@ -59,7 +62,9 @@ end
 configure_flags       = node.run_state['nginx_configure_flags']
 nginx_force_recompile = node.run_state['nginx_force_recompile']
 
-bash 'compile_nginx_source' do
+rvm_shell 'compile_nginx_source' do
+  ruby_string node[:global_ruby_version]
+
   cwd  ::File.dirname(src_filepath)
   code <<-EOH
     cd nginx-#{node['nginx']['source']['version']} &&
