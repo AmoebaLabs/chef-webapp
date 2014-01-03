@@ -14,8 +14,8 @@ else
 end
 
 # Can't force ssl w/o ssl
-if app.force_ssl && !app.ssl
-  raise "Can't force_ssl in your application if ssl is not enabled!"
+if app.ssl.force && !app.ssl.enabled
+  raise "Can't force ssl in your application if ssl is not enabled!"
 end
 
 # site nginx config which goes into sites-available/

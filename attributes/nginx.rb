@@ -1,5 +1,6 @@
-appdefs.ssl = false
-appdefs.force_ssl = false
+appdefs[:ssl][:enabled] = node[:application][:ssl][:cert_name] ? true : false
+appdefs[:ssl][:force] = false
+appdefs[:ssl][:cert_name] = nil
 
 if app[:http_auth]
   appdefs.http_auth.realm   = "/"
@@ -56,3 +57,5 @@ override['nginx']['source']['default_configure_flags'] = %W[
 override['nginx']['source']['version']  = node['nginx']['version']
 override['nginx']['source']['url']      = "http://nginx.org/download/nginx-#{node['nginx']['source']['version']}.tar.gz"
 override['nginx']['source']['checksum'] = node[:webapp][:nginx][:checksum]
+
+override['ssl_certs'] = [ node[:application][:ssl][:cert_name] ] if node[:application][:ssl][:cert_name]

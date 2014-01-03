@@ -19,7 +19,7 @@ server {
 }
 <% end; end %>
 
-<% if node[:application][:force_ssl] %>
+<% if node[:application][:ssl][:force] %>
 # Force SSL for this application
 server {
   server_name <%= app.url %>;
@@ -51,11 +51,11 @@ server {
   server_name <%= url %>;
   <% end %>
 
-  <% if app.ssl %>
+  <% if node[:application][:ssl][:enabled] %>
   # Also some SSL directives:
   listen 443 ssl;
-  ssl_certificate <%= app.ssl.certificate %>;
-  ssl_certificate_key <%= app.ssl.key %>;
+  ssl_certificate /etc/ssl/public/<%= node[:application][:ssl][:cert_name] %>-chained.pem;
+  ssl_certificate_key /etc/ssl/private/<%= node[:application][:ssl][:cert_name] %>.key;
   <% end %>
 
   # Serve static files
