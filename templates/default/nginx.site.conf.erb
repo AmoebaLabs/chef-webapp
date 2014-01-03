@@ -34,6 +34,7 @@ server {
   # Application Server Config (Passenger)
   passenger_ruby    <%= node[:application][:ruby_version] %>;
   passenger_app_env <%= node[:application][:environment] %>;
+  passenger_enabled on;
   <% end %>
 
   # Some sensible defaults for a Web Application server
@@ -66,43 +67,43 @@ server {
   error_page 422 /422.html;
   error_page 404 /404.html;
 
+  <% if app[:unicorn_enabled] %>
   location / {
-  try_files $uri @app;
+    try_files $uri @app;
   }
 
   # Proxy to app via unix socket
   location @app {
-  proxy_pass http://<%= app.name %>;
-  proxy_redirect off;
+    proxy_pass http://<%= app.name %>;
+    proxy_redirect off;
 
-  proxy_set_header Host               $host;
-  proxy_set_header X-Real-IP          $remote_addr;
-  proxy_set_header X-Forwarded-For    $proxy_add_x_forwarded_for;
-  proxy_set_header X-Forwarded-Proto  $scheme;
+    proxy_set_header Host               $host;
+    proxy_set_header X-Real-IP          $remote_addr;
+    proxy_set_header X-Forwarded-For    $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto  $scheme;
 
-  client_max_body_size       10m;
-  client_body_buffer_size    128k;
+    client_max_body_size       10m;
+    client_body_buffer_size    128k;
 
-  proxy_connect_timeout      90;
-  proxy_send_timeout         90;
-  proxy_read_timeout         90;
+    proxy_connect_timeout      90;
+    proxy_send_timeout         90;
+    proxy_read_timeout         90;
 
-  proxy_buffer_size          4k;
-  proxy_buffers              4 32k;
-  proxy_busy_buffers_size    64k;
-  proxy_temp_file_write_size 64k;
+    proxy_buffer_size          4k;
+    proxy_buffers              4 32k;
+    proxy_busy_buffers_size    64k;
+    proxy_temp_file_write_size 64k;
+  }
+  <% end %>
 
-}
-
-<% if app[:http_auth] %>
+  <% if app[:http_auth] %>
   location <%= app.http_auth.realm %> {
-  auth_basic            "Restricted";
-  auth_basic_user_file  htpasswd;
+    auth_basic            "Restricted";
+    auth_basic_user_file  htpasswd;
   }
   <% app.http_auth.exclude.each do |exclude_url| %>
-    location <%= exclude_url %> {
+  location <%= exclude_url %> {
     auth_basic off;
-    }
-  <% end %>
-<% end %>
+  }
+  <% end; end %>
 }
