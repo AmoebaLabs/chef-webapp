@@ -6,10 +6,15 @@ user app.user.name do
   supports  :manage_home => true
 end
 
-# This looks silly but is serious. We want passenger included first, if it is included at all
-# so the module can be included before nginx compiles
-if node.run_list.recipes.include?('webapp::passenger')
-  include_recipe 'webapp::passenger'
+case app.type.downcase
+  when 'rails', 'passenger'
+    include_recipe 'webapp::passenger'
+  when 'unicorn'
+    raise "Unicorn support not yet implemented"
+  when 'nodejs'
+    raise "NodeJS support not yet implemented"
+  else
+    raise "You must specify an application type (hint: passenger, unicorn, nodejs, and so forth)"
 end
 
 %w( rvm nginx capistrano cron db ).each do |r|

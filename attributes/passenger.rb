@@ -1,5 +1,6 @@
 include_attribute 'webapp::rvm' # RVM must be included before this... for ruby version
 include_attribute 'webapp::nginx' # Need nginx attributes to set configure flags
+
 # We're going to install passenger into the default / system ruby
 default[:webapp][:passenger][:ruby] = node[:global_ruby_version]
 default[:webapp][:passenger][:common_pkgs] = %w( libssl-dev zlib1g-dev libcurl4-openssl-dev )

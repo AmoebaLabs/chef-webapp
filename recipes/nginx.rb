@@ -1,6 +1,6 @@
 include_recipe 'webapp::nginx_source'
 
-if app.web_enabled
+if app[:nginx][:enabled]
   service "nginx" do
     action :start
   end

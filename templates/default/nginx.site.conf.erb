@@ -2,7 +2,7 @@
 #  YOU WISH TO MAKE A MODIFICATION, YOU SHOULD DO SO IN THE CHEF KITCHEN FOR THIS SERVER AND RUN:
 #  `amoeba node push --node <%= node[:name] %>`
 
-<% if app[:unicorn_enabled] %>
+<% if app[:type].match /unicorn/i %>
 # Listen on Application Socket
 upstream <%= app[:name] %> {
   server unix:<%= app[:socket] %> fail_timeout=0;
@@ -30,7 +30,7 @@ server {
 
 # Serve Application
 server {
-  <% if app[:passenger_enabled] %>
+  <% if app[:type].match /(passenger|rails)/i %>
   # Application Server Config (Passenger)
   passenger_ruby    <%= node[:application][:ruby_version] %>;
   passenger_app_env <%= node[:application][:environment] %>;
@@ -67,7 +67,7 @@ server {
   error_page 422 /422.html;
   error_page 404 /404.html;
 
-  <% if app[:unicorn_enabled] %>
+  <% if app[:type].match /unicorn/i %>
   location / {
     try_files $uri @app;
   }

@@ -12,6 +12,7 @@ appdefs.alias_urls = []
 appdefs.url = node.fqdn
 
 appdefs[:nginx][:keepalive_timeout] = 65
+appdefs[:nginx][:enabled] = true
 
 default[:webapp][:nginx][:user] = 'nobody'
 default[:webapp][:nginx][:group] = 'nogroup'

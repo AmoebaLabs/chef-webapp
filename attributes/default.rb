@@ -19,22 +19,10 @@ appdefs.init_script     = "#{app.init_path}/#{app.name}"
 appdefs.capfile         = "#{app.config_path}/Capfile"
 appdefs.procfile        = "#{app.config_path}/Procfile"
 
-# NOTE: Cannot set to 'false' if you try to use any app stuff in unicorn.rb
-appdefs.preload         = true
-
-# This attribute controls if we should start the web server
-appdefs.web_enabled       = true
-
-# Note that passenger and unicorn are mutually exclusive
-appdefs.unicorn_enabled   = false # Future TODO
-appdefs.passenger_enabled = true
-
-# Foreman support (will start & monitor foreman)
-appdefs.foreman_enabled   = false # Future TODO
-
-# Unicorn/Passenger options (not all apply to both):
-appdefs.workers         = 2
-appdefs.socket          = "#{app.run_path}/#{app.name}.socket"
+# Note that passenger and unicorn are mutually exclusive. Defaults to passenger.
+# Type is mandatory and you must pick one and only one
+# TODO Future unicorn & nodejs support
+appdefs.type            = 'passenger'
 
 repo, branch = app.repository.match(/(^.*?)(?:#([^#]+))?$/)[1..2]
 appdefs.repo            = repo
