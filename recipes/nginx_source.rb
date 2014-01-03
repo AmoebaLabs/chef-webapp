@@ -1,3 +1,5 @@
+require 'digest/sha1'
+
 #include_recipe 'nginx::source' (not working due to ohai plugin and chef 11)
 # Grabbing most of the cookbook of nginx::source here, and including the parts that I can
 #
@@ -41,9 +43,6 @@ cookbook_file "#{node['nginx']['dir']}/mime.types" do
   notifies :reload, 'service[nginx]'
 end
 
-# TODO: Remove (temp)
-log "About to configure NGINXYO w/ flags: #{node.run_state['nginx_configure_flags'].join(', ')}"
-
 # Unpack downloaded source so we could apply nginx patches
 # in custom modules - example http://yaoweibin.github.io/nginx_tcp_proxy_module/
 # patch -p1 < /path/to/nginx_tcp_proxy_module/tcp.patch
@@ -59,8 +58,14 @@ node['nginx']['source']['modules'].each do |ngx_module|
   include_recipe ngx_module
 end
 
-configure_flags       = node.run_state['nginx_configure_flags']
-nginx_force_recompile = node.run_state['nginx_force_recompile']
+# Calculate the version information (based on version number and compile flags)
+configure_flags = node.run_state['nginx_configure_flags']
+version_info    = node['nginx']['source']['version'].to_s + ' ' +  configure_flags.sort.join(' ')
+version_info = Digest::SHA1.hexdigest(version_info)
+previous_version_info = ''
+if ::File.exist?('/etc/nginx/version-info')
+  previous_version_info = ::File.read('/etc/nginx/version-info').chomp
+end
 
 rvm_shell 'compile_nginx_source' do
   ruby_string node[:global_ruby_version]
@@ -73,10 +78,8 @@ rvm_shell 'compile_nginx_source' do
   EOH
 
   not_if do
-    nginx_force_recompile == false &&
-      node.automatic_attrs['nginx'] &&
-      node.automatic_attrs['nginx']['version'] == node['nginx']['source']['version'] &&
-      node.automatic_attrs['nginx']['configure_arguments'].sort == configure_flags.sort
+    # Check the version-info file, if it matches our current version_info, don't bother compiling
+     version_info == previous_version_info
   end
 
   notifies :restart, 'service[nginx]'
@@ -103,3 +106,11 @@ end
 
 node.run_state.delete('nginx_configure_flags')
 node.run_state.delete('nginx_force_recompile')
+
+# Write out a hash to determine if we need to recompile later
+file '/etc/nginx/version-info' do
+  owner 'root'
+  group 'root'
+  mode '0644'
+  content version_info
+end
