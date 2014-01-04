@@ -5,6 +5,12 @@ directory '/var/lib/redis' do
   mode 0755
 end
 
+directory '/var/log/redis' do
+  user 'root'
+  group 'root'
+  mode 0755
+end
+
 %w(redisio::install redisio::enable).each do |r|
   include_recipe r
 end
