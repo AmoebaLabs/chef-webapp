@@ -41,6 +41,5 @@ template "/etc/monit/conf.d/nginx.conf" do
   owner 'root'
   group 'root'
   mode  0644
-  variables service_commands('nginx')
   notifies :reload, 'service[monit]', :delayed
 end

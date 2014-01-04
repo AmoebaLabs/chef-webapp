@@ -3,7 +3,7 @@
 #  `amoeba node push --node <%= node[:name] %>`
 
 check process nginx with pidfile <%= node[:nginx][:pid] %>
-  start program = "<%= @start_command %>"
-  stop program = "<%= @stop_command %>"
+  start program = "/usr/sbin/service nginx start"
+  stop program = "/usr/sbin/service nginx stop"
   if children > <%= node[:webapp][:nginx][:monit][:max_children] %> then restart
   if 5 restarts within <%= node[:webapp][:nginx][:monit][:restart_cycles] %> cycles then timeout
