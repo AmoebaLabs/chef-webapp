@@ -22,6 +22,10 @@ case app.type.downcase
 end
 
 # Followed by nginx and others
-%w( nginx capistrano cron db ).each do |r|
+%w( nginx capistrano cron ).each do |r|
   include_recipe "webapp::#{r}"
+end
+
+if app.database
+  include_recipe "webapp::db"
 end

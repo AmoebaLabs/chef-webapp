@@ -29,3 +29,6 @@ db.adapter = case app.database[:type]
              end
 
 db.environments[app.environment] = {}
+
+# Override PSQL stuffs
+override[:postgresql][:password][:postgres] = false
