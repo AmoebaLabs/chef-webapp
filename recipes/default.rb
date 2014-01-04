@@ -6,6 +6,15 @@ user app.user.name do
   supports  :manage_home => true
 end
 
+# RVM should come first
+include_recipe 'webapp::rvm'
+
+# Followed by nginx and others
+%w( nginx capistrano cron db ).each do |r|
+  include_recipe "webapp::#{r}"
+end
+
+# Then the app type
 case app.type.downcase
   when 'rails', 'passenger'
     include_recipe 'webapp::passenger'
@@ -16,8 +25,3 @@ case app.type.downcase
   else
     raise "You must specify an application type (hint: passenger, unicorn, nodejs, and so forth)"
 end
-
-%w( rvm nginx capistrano cron db ).each do |r|
-  include_recipe "webapp::#{r}"
-end
-

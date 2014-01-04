@@ -60,3 +60,9 @@ override['nginx']['source']['url']      = "http://nginx.org/download/nginx-#{nod
 override['nginx']['source']['checksum'] = node[:webapp][:nginx][:checksum]
 
 override['ssl_certs'] = [ node[:application][:ssl][:cert_name] ] if node[:application][:ssl][:cert_name]
+
+# We will include the passenger attributes next, so that if we compile nginx it can
+# include overrides set by passenger.
+if node.recipes.include?('webapp::passenger')
+  include_attribute 'webapp::passenger'
+end
