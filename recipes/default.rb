@@ -9,11 +9,6 @@ end
 # RVM should come first
 include_recipe 'webapp::rvm'
 
-# Followed by nginx and others
-%w( nginx capistrano cron db ).each do |r|
-  include_recipe "webapp::#{r}"
-end
-
 # Then the app type
 case app.type.downcase
   when 'rails', 'passenger'
@@ -24,4 +19,9 @@ case app.type.downcase
     raise "NodeJS support not yet implemented"
   else
     raise "You must specify an application type (hint: passenger, unicorn, nodejs, and so forth)"
+end
+
+# Followed by nginx and others
+%w( nginx capistrano cron db ).each do |r|
+  include_recipe "webapp::#{r}"
 end

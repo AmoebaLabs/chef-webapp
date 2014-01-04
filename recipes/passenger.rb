@@ -10,6 +10,9 @@ rvm_gem 'passenger' do
   version     node[:webapp][:passenger][:version]
 end
 
+# Ensure nginx is loaded before continuing
+include_recipe 'webapp::nginx'
+
 template "#{node["nginx"]["dir"]}/conf.d/passenger.conf" do
   source 'modules/passenger.conf.erb'
   cookbook 'nginx'
