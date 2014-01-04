@@ -3,9 +3,12 @@
 #  `amoeba node push --node <%= node[:name] %>`
 
 check process <%= @process_name %>
-with pidfile <%= app.redis.pidfile %>
-start program = "<%= @start_command %>" with timeout 60 seconds
-stop  program = "<%= @stop_command %>"
-if failed unixsocket <%= app.redis.socket %> then restart
-if failed unixsocket <%= app.run_path %>/redis.sock then alert
-group <%= app.name %>
+  with pidfile <%= app.redis.pidfile %>
+  start program = "<%= @start_command %>" with timeout 60 seconds
+  stop  program = "<%= @stop_command %>"
+  if failed unixsocket <%= app.redis.socket %> then restart
+  if failed host 127.0.0.1 port <%= app.redis.port %> then restart
+  if failed unixsocket <%= app.redis.socket %> then alert
+  if failed host 127.0.0.1 port <%= app.redis.port %> then alert
+  if 5 restart within <%= app.redis.monit.restart_cycles %> cycles then timeout
+  group <%= app.name %>

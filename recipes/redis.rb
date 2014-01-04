@@ -1,3 +1,10 @@
+# Ensure the top-level directory exists for redis' user homes
+directory '/var/lib/redis' do
+  user 'root'
+  group 'root'
+  mode 0755
+end
+
 %w(redisio::install redisio::enable).each do |r|
   include_recipe r
 end
@@ -17,9 +24,11 @@ group app.redis.group do
 end
 
 process_name = "#{app.name}_redis"
-monitrc process_name do
-  template_source   'monit/redis.conf.erb'
-  template_cookbook 'app'
-
+template "/etc/monit/conf.d/#{process_name}.conf" do
+  source 'monit/redis.conf.erb'
+  owner 'root'
+  group 'root'
+  mode  0644
   variables redis_commands.merge(process_name: process_name)
+  notifies :reload, 'service[monit]', :delayed
 end

@@ -34,3 +34,13 @@ if app[:http_auth]
     password  app.http_auth.password
   end
 end
+
+# Finally ensure monit has a nginx config
+template "/etc/monit/conf.d/nginx.conf" do
+  source 'monit/nginx.conf.erb'
+  owner 'root'
+  group 'root'
+  mode  0644
+  variables service_commands('nginx')
+  notifies :reload, 'service[monit]', :delayed
+end

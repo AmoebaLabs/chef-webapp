@@ -23,6 +23,8 @@ default[:webapp][:nginx][:version] = '1.4.4'
 # You'll want to set this to avoid re-downloading files (this is correct for version above):
 default[:webapp][:nginx][:checksum] = '7c989a58e540'
 default[:webapp][:nginx][:configure_flags] = []
+default[:webapp][:nginx][:monit][:max_children] = 250
+default[:webapp][:nginx][:monit][:restart_cycles] = 5
 
 # Override these attributes in the nginx cookbook (override in your node via node[:webapp])
 override['nginx']['user']  = node[:webapp][:nginx][:user]
