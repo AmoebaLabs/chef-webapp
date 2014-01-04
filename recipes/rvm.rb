@@ -17,6 +17,7 @@ node.override.rvm.user_installs = [{
   ] + app.gems.map {|g| { 'name' => g } }
 }]
 
+include_recipe 'rvm::system'
 include_recipe 'rvm::user'
 
 rvm_script = '$HOME/.rvm/scripts/rvm'
