@@ -30,5 +30,8 @@ db.adapter = case app.database[:type]
 
 db.environments[app.environment] = {}
 
+
+default[:webapp][:postgresql][:monit][:restart_cycles] = 5
+
 # Override PSQL stuffs
 override[:postgresql][:password][:postgres] = false

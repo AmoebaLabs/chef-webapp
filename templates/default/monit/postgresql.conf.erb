@@ -1,0 +1,9 @@
+## NOTE: THIS FILE IS MANAGED BY CHEF. CHANGES TO THIS FILE WILL BE REMOVED THE NEXT CHEF RUN. IF
+#  YOU WISH TO MAKE A MODIFICATION, YOU SHOULD DO SO IN THE CHEF KITCHEN FOR THIS SERVER AND RUN:
+#  `amoeba node push --node <%= node[:name] %>`
+
+check process postgresql with pidfile <%= node[:postgresql][:config][:external_pid_file]  %>
+  start program = "/usr/sbin/service postgresql start"
+  stop program = "/usr/sbin/service postgresql stop"
+  if failed host localhost port 5432 protocol pgsql then restart
+  if 5 restarts within <%= node[:webapp][:postgresql][:monit][:restart_cycles] %> cycles then timeout
