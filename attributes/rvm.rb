@@ -1,5 +1,9 @@
 # This is the app ruby version
 appdefs[:ruby_version] = 'ruby-1.9.3-p484'
+
+# The ruby wrapper for the application itself
+appdefs[:ruby_wrapper] = "#{node[:application][:user][:home]}/.rvm/rubies/#{node[:application][:ruby_version]}/bin/ruby"
+
 # These are the app's gems. Append by setting to node.default
 appdefs[:gems] = %w( bundler rake )
 

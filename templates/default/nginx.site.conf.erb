@@ -32,7 +32,7 @@ server {
 server {
   <% if app[:type].match /(passenger|rails)/i %>
   # Application Server Config (Passenger)
-  passenger_ruby    <%= node[:application][:ruby_version] %>;
+  passenger_ruby    <%= node[:application][:ruby_wrapper] %>;
   passenger_app_env <%= node[:application][:environment] %>;
   passenger_enabled on;
   <% end %>
