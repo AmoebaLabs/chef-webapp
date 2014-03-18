@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+## NOTE: THIS FILE IS MANAGED BY CHEF. CHANGES TO THIS FILE WILL BE REMOVED THE NEXT CHEF RUN. IF
+#  YOU WISH TO MAKE A MODIFICATION, YOU SHOULD DO SO IN THE CHEF KITCHEN FOR THIS SERVER AND RUN:
+#  `amoeba node push --node <%= node[:name] %>`
+
+pid_file="<%= node[:application][:run_path] %>/sidekiq.pid-$1";
+
+if [ -d <%= node[:application][:current_path] %> ] && \
+   [ -f $pid_file ] && \
+   kill -0 `cat $pid_file` > /dev/null 2>&1
+then
+  cd <%= node[:application][:current_path] %> && \
+  bundle exec sidekiqctl stop $pid_file 10
+else
+  echo 'Sidekiq is not running'
+fi

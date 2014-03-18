@@ -6,7 +6,7 @@ directory app.path do
   mode 0755
 end
 
-[app.releases_path, app.shared_path, app.log_path, app.system_path, app.run_path].each do |dir|
+[app.releases_path, app.shared_path, app.log_path, app.system_path, app.run_path, app.init_path].each do |dir|
   directory dir do
     owner app.user.name
     group app.user.group

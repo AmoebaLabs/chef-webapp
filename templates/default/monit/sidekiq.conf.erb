@@ -1,0 +1,12 @@
+## NOTE: THIS FILE IS MANAGED BY CHEF. CHANGES TO THIS FILE WILL BE REMOVED THE NEXT CHEF RUN. IF
+#  YOU WISH TO MAKE A MODIFICATION, YOU SHOULD DO SO IN THE CHEF KITCHEN FOR THIS SERVER AND RUN:
+#  `amoeba node push --node <%= node[:name] %>`
+
+<% node[:application][:sidekiq][:worker_count].times do |num| %>
+check process sidekiq-<%= num %>
+  with pidfile <%= node[:application][:run_path] %>/sidekiq.pid-<%= num %>
+  start program = "/bin/su -l <%= node[:application][:user][:name] %> -c 'start_sidekiq <%= num %>'" with timeout <%= node[:application][:sidekiq][:monit_timeout] %> seconds
+  stop program = "/bin/su -l <%= node[:application][:user][:name] %>  -c 'stop_sidekiq <%= num %>'" with timeout <%= node[:application][:sidekiq][:monit_timeout] %> seconds
+  group <%= node[:application][:name] %>_sidekiq
+
+<% end %>

@@ -15,10 +15,6 @@ appdefs.run_path        = "#{app.shared_path}/run"
 appdefs.log_path        = "#{app.shared_path}/log"
 appdefs.init_path       = "#{app.shared_path}/init"
 
-appdefs.init_script     = "#{app.init_path}/#{app.name}"
-appdefs.capfile         = "#{app.config_path}/Capfile"
-appdefs.procfile        = "#{app.config_path}/Procfile"
-
 # Note that passenger and unicorn are mutually exclusive. Defaults to passenger.
 # Type is mandatory and you must pick one and only one
 # TODO Future unicorn & nodejs support
