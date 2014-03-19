@@ -3,8 +3,29 @@
 #  YOU WISH TO MAKE A MODIFICATION, YOU SHOULD DO SO IN THE CHEF KITCHEN FOR THIS SERVER AND RUN:
 #  `amoeba node push --node <%= node[:name] %>`
 
+if [ ! -d <%= node[:application][:current_path] %> ]
+then
+  echo "Web application not installed, can't start sidekiq (aborting!)"
+  exit 1
+fi
+
+pid_file="<%= node[:application][:run_path] %>/sidekiq.pid-$1"
+
+if [ -e $pid_file ]; then
+  pid=`cat $pid_file`
+  if ps -p $pid > /dev/null 2>&1 ; then
+    echo "Sidekiq process already running (PID $pid), exiting!"
+    exit 1
+  else
+    echo "WARN: Sidekiq process not running (PID $pid), but PID file present, removing!"
+    rm $pid_file
+  fi
+fi
+
+
 cd <%= node[:application][:current_path] %> && \
   bundle exec sidekiq -e <%= node[:application][:environment] %> \
-                      -C <%= node[:application][:config_path] %>/sidekiq.yml \
-                      -i $1 -P <%= node[:application][:run_path] %>/sidekiq.pid-$1 \
+    -C <%= node[:application][:config_path] %>/sidekiq.yml \
+    -i $1 \
+    -P <%= node[:application][:run_path] %>/sidekiq.pid-$1 \
     >> <%= node[:application][:log_path] %>/sidekiq.log 2>&1 &

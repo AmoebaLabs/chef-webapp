@@ -5,8 +5,7 @@
 <% node[:application][:sidekiq][:worker_count].times do |num| %>
 check process sidekiq-<%= num %>
   with pidfile <%= node[:application][:run_path] %>/sidekiq.pid-<%= num %>
-  start program = "/bin/su -l <%= node[:application][:user][:name] %> -c 'start_sidekiq <%= num %>'" with timeout <%= node[:application][:sidekiq][:monit_timeout] %> seconds
-  stop program = "/bin/su -l <%= node[:application][:user][:name] %>  -c 'stop_sidekiq <%= num %>'" with timeout <%= node[:application][:sidekiq][:monit_timeout] %> seconds
+  start program = "/bin/su -l <%= node[:application][:user][:name] %> -c 'RAILS_ENV=<%= node[:application][:environment] %> <%= node[:application][:init_path] %>/start_sidekiq <%= num %>'" with timeout <%= node[:application][:sidekiq][:monit_timeout] %> seconds
+  stop program = "/bin/su -l <%= node[:application][:user][:name] %>  -c 'RAILS_ENV=<%= node[:application][:environment] %> <%= node[:application][:init_path] %>/stop_sidekiq <%= num %>'" with timeout <%= node[:application][:sidekiq][:monit_timeout] %> seconds
   group <%= node[:application][:name] %>_sidekiq
-
 <% end %>
