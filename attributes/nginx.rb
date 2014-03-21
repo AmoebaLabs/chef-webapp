@@ -64,7 +64,6 @@ override['nginx']['source']['checksum'] = node[:webapp][:nginx][:checksum]
 # If we have an application SSL cert, add it to the node[:ssl_certs] array so it is installed
 if node[:application][:ssl][:cert_name]
   combined_certs = [ node[:application][:ssl][:cert_name] ] | node[:ssl_certs]
-  combined_certs.reject! { |c| c.nil? || c.empty? }
   override['ssl_certs'] = combined_certs
 end
 
