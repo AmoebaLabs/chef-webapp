@@ -19,3 +19,9 @@ directory app.config_path do
   group     app.user.group
   mode      0700
 end
+
+file app.envfile do
+  owner     app.user.name
+  group     app.user.name
+  content   app.env_vars.map {|k, v| %{#{k}="#{v}"}}.join "\n"
+end
