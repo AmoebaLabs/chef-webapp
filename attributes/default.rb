@@ -1,5 +1,7 @@
 # node[:application][:environment] must be defined (no default)
 
+node.default['bundle_version'] = '1.5.0'
+
 appdefs.user.name       = app.name
 appdefs.user.group      = app.user.name
 appdefs.user.home       = "/home/#{app.user.name}"
