@@ -17,6 +17,6 @@ default[:global_ruby_version] = 'ruby-2.0.0-p353'
 
 override[:rvm][:default_ruby] = node[:global_ruby_version]
 override[:rvm][:global_gems] = [
-  { name: 'bundler' },
+  { name: 'bundler', version: node[:bundle_version] },
   { name: 'rake' }
 ]
