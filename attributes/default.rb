@@ -14,6 +14,7 @@ appdefs.system_path     = "#{app.shared_path}/system"
 appdefs.run_path        = "#{app.shared_path}/run"
 appdefs.log_path        = "#{app.shared_path}/log"
 appdefs.init_path       = "#{app.shared_path}/init"
+appdefs.pids_path       = "#{app.shared_path}/pids"
 
 appdefs.envfile         = "#{app.config_path}/env.site"
 

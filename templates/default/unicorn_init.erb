@@ -1,0 +1,62 @@
+#!/bin/bash --login
+
+PID=<%= app.run_path %>/unicorn.pid
+CMD="dotenv bundle exec unicorn_rails -c config/unicorn.rb"
+
+if [ `whoami` != "<%= app.user.name %>" ]; then
+echo >&2 "Must be run by user '<%= app.user.name %>'." && exit 1
+fi
+
+source <%= app.user.home %>/.bashrc
+cd <%= app.current_path %> || exit 1
+
+sig () {
+test -s "$PID" && kill -$1 `cat $PID`
+}
+
+workersig () {
+workerpid="<%= app.run_path %>/unicorn.$2.pid"
+test -s "$workerpid" && kill -$1 `cat $workerpid`
+}
+
+case $1 in
+start)
+sig 0 && echo >&2 "Already running" && exit 0
+$CMD
+;;
+stop)
+sig QUIT && exit 0
+echo >&2 "Not running"
+;;
+force-stop)
+sig TERM && exit 0
+echo >&2 "Not running"
+;;
+restart|reload)
+sig HUP && echo reloaded OK && exit 0
+echo >&2 "Couldn't reload, starting '$CMD' instead"
+$CMD
+;;
+upgrade)
+<% if app.unicorn.preload %>
+    ## requires later sending SIGQUIT
+    sig USR2 && exit 0
+<% else %>
+    sig HUP && echo reloaded OK && exit 0
+<% end %>
+echo >&2 "Couldn't upgrade, starting '$CMD' instead"
+$CMD
+;;
+kill_worker)
+workersig QUIT $2 && exit 0
+echo >&2 "Worker not running"
+;;
+rotate)
+sig USR1 && echo rotated logs OK && exit 0
+echo >&2 "Couldn't rotate logs" && exit 1
+;;
+*)
+echo >&2 "Usage: $0 <start|stop|restart|upgrade|rotate|force-stop>"
+exit 1
+;;
+esac

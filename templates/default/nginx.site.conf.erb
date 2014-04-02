@@ -5,7 +5,7 @@
 <% if app[:type].match /unicorn/i %>
 # Listen on Application Socket
 upstream <%= app[:name] %> {
-  server unix:<%= app[:socket] %> fail_timeout=0;
+  server unix:<%= app[:unicorn][:socket] %> fail_timeout=0;
 }
 <% end %>
 

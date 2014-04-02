@@ -5,7 +5,7 @@ appdefs[:ruby_version] = 'ruby-1.9.3-p484'
 appdefs[:ruby_wrapper] = "#{node[:application][:user][:home]}/.rvm/rubies/#{node[:application][:ruby_version]}/bin/ruby"
 
 # These are the app's gems. Append by setting to node.default
-appdefs[:gems] = %w( bundler )
+appdefs[:gems] = %w( bundler rake )
 
 # And finally, some overall (not per-app) RVM settings:
 default[:webapp][:rvm][:common_pkgs] = %w( qt4-qmake libqt4-dev )
