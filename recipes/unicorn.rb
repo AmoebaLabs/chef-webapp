@@ -8,7 +8,7 @@ template app.init_script do
 end
 
 # Finally ensure monit has a nginx config
-template "/etc/monit/conf.d/#{app.name}_unicorn" do
+template "/etc/monit/conf.d/#{app.name}_unicorn.conf" do
   source 'monit/unicorn.conf.erb'
   owner 'root'
   group 'root'
@@ -17,7 +17,7 @@ template "/etc/monit/conf.d/#{app.name}_unicorn" do
 end
 
 app.unicorn.workers.times do |w|
-  template "/etc/monit/conf.d/#{app.name}_unicorn_worker_#{w}" do
+  template "/etc/monit/conf.d/#{app.name}_unicorn_worker_#{w}.conf" do
     source 'monit/unicorn_worker.conf.erb'
     owner 'root'
     group 'root'
