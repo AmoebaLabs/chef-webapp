@@ -15,7 +15,7 @@ app.crontab.each do |c|
       environment app.env_vars
 
       for k, v in c
-        next if [:command, :name].include?(k.to_sym)
+        next if [:command, :name, :include_bundle].include?(k.to_sym)
         send(k.to_sym, v)
       end
     end
