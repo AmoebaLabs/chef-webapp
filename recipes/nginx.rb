@@ -1,4 +1,5 @@
 include_recipe 'webapp::nginx_source'
+include_recipe 'nginx::commons_conf'
 
 if app[:nginx][:enabled]
   service "nginx" do
