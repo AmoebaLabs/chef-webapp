@@ -38,7 +38,7 @@ server {
   <% end %>
 
   # Some sensible defaults for a Web Application server
-  listen            80;
+  listen            <%= app[:nginx][:load_balanced] ? "#{app[:private_ip]}:" : ''%>80;
   underscores_in_headers on;
   sendfile          on;
   gzip              on;
@@ -74,7 +74,7 @@ server {
 
   # Proxy to app via unix socket
   location @app {
-    proxy_pass http://<%= app.name %>;
+    proxy_pass http://<%= app[:name] %>;
     proxy_redirect off;
 
     proxy_set_header Host               $host;

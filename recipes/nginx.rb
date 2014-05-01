@@ -25,11 +25,19 @@ template "#{node[:nginx][:dir]}/sites-available/#{app.name}.conf" do
   notifies :reload, resources(:service => "nginx")
 end
 
+nginx_site "#{app.name}.conf"
+
+if app[:nginx][:load_balancer]
+  template "#{node[:nginx][:dir]}/sites-available/#{app.name}.load_balancer.conf" do
+    source "nginx.balancer.conf.erb"
+    notifies :reload, resources(:service => "nginx")
+  end
+  nginx_site "#{app.name}.load_balancer.conf"
+end
+
 nginx_site 'default' do
   enable false
 end
-
-nginx_site "#{app.name}.conf"
 
 if app[:http_auth]
   package "apache2-utils"
