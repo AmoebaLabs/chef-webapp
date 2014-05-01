@@ -16,7 +16,7 @@ appdefs.log_path        = "#{app.shared_path}/log"
 appdefs.init_path       = "#{app.shared_path}/init"
 appdefs.pids_path       = "#{app.shared_path}/pids"
 
-appdefs.envfile         = "#{app.config_path}/.env"
+appdefs.envfile         = "#{app.shared_path}/.env"
 
 # Note that passenger and unicorn are mutually exclusive. Defaults to passenger.
 # Type is mandatory and you must pick one and only one
