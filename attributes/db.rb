@@ -26,6 +26,39 @@ db.adapter = case app.database[:type]
                      method:   "peer"
                    }
                  ]
+                 if app[:postgresql] && app.postgresql[:nodes]
+                   app.postgresql[:nodes].each do |host|
+                     default.postgresql.pg_hba << {
+                         user:     app.user.name,
+                         type:     "host",
+                         db:       app.database.name,
+                         addr:     "#{host}/32",
+                         method:   "trust"
+                     }
+                   end
+                 end
+                 if app[:postgresql] && app.postgresql[:replication]
+                   app.postgresql[:nodes].each do |host|
+                     next if host == app.private_ip
+                     default.postgresql.pg_hba << {
+                         user:     "postgres",
+                         type:     "host",
+                         db:       "replication",
+                         addr:     "#{host}/32",
+                         method:   "trust"
+                     }
+                   end
+                   default.postgresql.config.merge!({
+                        listen_addresses: "localhost,#{app.private_ip}",
+                        wal_level: 'hot_standby',
+                        archive_mode: 'on',
+                        archive_command: 'cd .',
+                        max_wal_senders: 5,
+                        wal_keep_segments: 32,
+                        hot_standby: 'on',
+                        ssl: 'off'
+                   })
+                 end
                  "postgresql"
                when /^mysql/    then "mysql2"
                when /^sqlite/   then "sqlite3"

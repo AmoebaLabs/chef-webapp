@@ -1,0 +1,24 @@
+## NOTE: THIS FILE IS MANAGED BY CHEF. CHANGES TO THIS FILE WILL BE REMOVED THE NEXT CHEF RUN. IF
+#  YOU WISH TO MAKE A MODIFICATION, YOU SHOULD DO SO IN THE CHEF KITCHEN FOR THIS SERVER AND RUN:
+#  `amoeba node push --node <%= node[:name] %>`
+
+# Applications load balancing
+upstream <%= app[:name] %>-load_balancer {
+  <% app[:nginx][:load_balancer].each do |host| %>
+        server <%= host %>;
+      <% end %>
+}
+
+server {
+  listen 80;
+  server_name <%= app[:url] %>;
+
+  location / {
+    proxy_pass http://<%= app[:name] %>-load_balancer;
+
+    proxy_set_header Host               $host;
+    proxy_set_header X-Real-IP          $remote_addr;
+    proxy_set_header X-Forwarded-For    $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto  $scheme;
+  }
+}
