@@ -1,0 +1,13 @@
+octopus:
+  replicated: true
+  environments:
+    - <%= app.environment %>
+ 
+  <%= app.environment %>:
+<% app[:postgresql][:nodes].each_with_index do |host, i| %>
+  <% next if host == app.private_ip %>
+  slave<%=i%>:
+    host: <%=host%>
+    adapter: <%=app.database.type%>
+    database: <%=app.database.name%>
+<% end %>
