@@ -6,8 +6,8 @@ octopus:
   <%= app.environment %>:
 <% app[:postgresql][:nodes].each_with_index do |host, i| %>
   <% next if host == app.database.host %>
-  slave<%=i%>:
-    host: <%=host%>
-    adapter: <%=app.database.type%>
-    database: <%=app.database.name%>
+    slave<%=i%>:
+      host: <%=host%>
+      adapter: <%=app.database.type%>
+      database: <%=app.database.name%>
 <% end %>
