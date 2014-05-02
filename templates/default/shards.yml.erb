@@ -5,7 +5,7 @@ octopus:
  
   <%= app.environment %>:
 <% app[:postgresql][:nodes].each_with_index do |host, i| %>
-  <% next if host == app.private_ip %>
+  <% next if host == app.database.host %>
   slave<%=i%>:
     host: <%=host%>
     adapter: <%=app.database.type%>
