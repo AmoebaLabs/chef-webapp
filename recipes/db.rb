@@ -53,18 +53,10 @@ template "/etc/monit/conf.d/#{db_type}.conf" do
   notifies :reload, 'service[monit]', :delayed
 end
 
-file "#{app.config_path}/database.yml" do
+template "#{app.config_path}/database.yml" do
+  source "database.yml.erb"
+  variables db_conf: db_conf
   owner app.user.name
   group app.user.group
-  mode  0600
-  content YAML.dump(Hash[app.database.environments.map {|env, conf| [env, db_conf.merge(conf).to_hash] }])
-end
-
-if app[:postgresql] && app.postgresql[:replication]
-  template "#{app.config_path}/shards.yml" do
-    source "shards.yml.erb"
-    owner app.user.name
-    group app.user.group
-    mode 0600
-  end
+  mode 0600
 end

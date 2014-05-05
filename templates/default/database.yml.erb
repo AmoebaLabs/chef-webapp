@@ -1,0 +1,1 @@
+<%=YAML.dump(Hash[{app.environment=> {}}.map {|env, conf| [env, db_conf.merge(conf).to_hash] }])%>

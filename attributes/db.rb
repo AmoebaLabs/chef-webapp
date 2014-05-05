@@ -5,6 +5,7 @@ db.name = app.name.gsub('-', '_')
 db.username = app.user.name
 db.password = ""
 db.encoding = "utf8"
+db.timeout = "5000"
 
 # Eventually it would be awesome if we could specify a node in the kitchen
 # to use as the DB host. So we should modify this accordingly:
