@@ -1,10 +1,10 @@
-<%=YAML.dump(Hash[{app.environment=> {}}.map {|env, conf| [env, db_conf.merge(conf).to_hash] }])%>
+<%=YAML.dump(Hash[{app.environment=> {}}.map {|env, conf| [env, @db_conf.merge(conf).to_hash] }])%>
 
 <% if app[:postgresql] && app.postgresql[:nodes] %>
   <% app.postgresql[:nodes].each do |host| %>
     <% role = app.private_ip==host ? app.postgresql[:replication] : (app.postgresql[:replication]=='master' ? 'slave': 'master') %>
 
-<%=YAML.dump(Hash[{"#{app.environment}_#{role}" => {}}.map {|env, conf| [env, db_conf.merge(conf).to_hash] }])%>
+<%=YAML.dump(Hash[{"#{app.environment}_#{role}" => {}}.map {|env, conf| [env, @db_conf.merge(conf).to_hash] }])%>
 
   <% end %>
 <% end %>
