@@ -3,7 +3,7 @@
 <% if app[:postgresql] && app.postgresql[:nodes] %>
   <% app.postgresql[:nodes].each do |host| %>
     <% role = app.private_ip==host ? app.postgresql[:replication] : (app.postgresql[:replication]=='master' ? 'slave': 'master') %>
-    <% @db_conf[:host] = host %>
+    <% @db_conf['host'] = host %>
 
 <%=YAML.dump(Hash[{"#{app.environment}_#{role}" => {}}.map {|env, conf| [env, @db_conf.merge(conf).to_hash] }])%>
 
