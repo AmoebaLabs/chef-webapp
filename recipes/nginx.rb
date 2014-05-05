@@ -1,4 +1,5 @@
 include_recipe 'webapp::nginx_source'
+include_recipe 'nginx::commons_conf'
 
 if app[:nginx][:enabled]
   service "nginx" do
@@ -25,6 +26,18 @@ template "#{node[:nginx][:dir]}/sites-available/#{app.name}.conf" do
 end
 
 nginx_site "#{app.name}.conf"
+
+if app[:nginx][:load_balancer]
+  template "#{node[:nginx][:dir]}/sites-available/#{app.name}.load_balancer.conf" do
+    source "nginx.balancer.conf.erb"
+    notifies :reload, resources(:service => "nginx")
+  end
+  nginx_site "#{app.name}.load_balancer.conf"
+end
+
+nginx_site 'default' do
+  enable false
+end
 
 if app[:http_auth]
   package "apache2-utils"

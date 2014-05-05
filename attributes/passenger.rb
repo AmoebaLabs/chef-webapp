@@ -18,8 +18,10 @@ default[:webapp][:passenger][:pool_idle_time] = 300
 default[:webapp][:passenger][:max_requests] = 0
 
 # Add passenger config flag
-override['nginx']['configure_flags'] = node.override['nginx']['configure_flags'] |
-  ["--add-module=#{node[:webapp][:passenger][:root_path]}/ext/nginx"]
+if node[:type] == 'passenger'
+  override['nginx']['configure_flags'] = node.override['nginx']['configure_flags'] |
+    ["--add-module=#{node[:webapp][:passenger][:root_path]}/ext/nginx"]
+end
 
 # Override values for nginx passenger.conf
 override['nginx']['passenger']['root'] = node[:webapp][:passenger][:root_path]

@@ -13,8 +13,9 @@ node.override.rvm.user_installs = [{
   'global_gems'   => [
     { 'name'    => 'rubygems-bundler',
       'action'  => 'remove'
-    }
-  ] + app.gems.map {|g| { 'name' => g } }
+    },
+    { 'name' => 'rake' }
+  ] + app.gems.map {|g| g.class == String ? { 'name' => g } : g }
 }]
 
 include_recipe 'rvm::system'
@@ -22,8 +23,8 @@ include_recipe 'rvm::user'
 
 rvm_script = '$HOME/.rvm/scripts/rvm'
 ensure_line "#{app.user.home}/.bashrc" do
-  content %{[[ -s "#{rvm_script}" ]] && source "#{rvm_script}"}
-end
-ensure_line "#{app.user.home}/.bashrc" do
-  content %{export PATH=$PATH:$HOME/.rvm/bin}
+  content [
+              %{[[ -s "#{rvm_script}" ]] && source "#{rvm_script}"},
+              %{export PATH=$PATH:$HOME/.rvm/bin}
+          ]
 end

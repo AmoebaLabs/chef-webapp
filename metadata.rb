@@ -17,3 +17,4 @@ depends 'redisio', '~> 1.7.0'
 # ensure Github version is used or a warning is thrown)
 depends 'rvm', '~> 0.9.1' # must use version from github: 'fnichol/chef-rvm'
 depends 'monit', '~> 1.5.0' # must use version from github: 'phlipper/chef-monit'
+depends 'unicorn', '~> 1.3.1' # must use version from github: 'AmoebaLabs/chef-unicorn'

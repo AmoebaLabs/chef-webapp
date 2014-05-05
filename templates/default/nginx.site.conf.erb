@@ -5,7 +5,7 @@
 <% if app[:type].match /unicorn/i %>
 # Listen on Application Socket
 upstream <%= app[:name] %> {
-  server unix:<%= app[:socket] %> fail_timeout=0;
+  server unix:<%= app[:unicorn][:socket] %> fail_timeout=0;
 }
 <% end %>
 
@@ -38,7 +38,7 @@ server {
   <% end %>
 
   # Some sensible defaults for a Web Application server
-  listen            80;
+  listen            <%= app[:nginx][:load_balanced] ? "#{app[:private_ip]}:" : ''%>80;
   underscores_in_headers on;
   sendfile          on;
   gzip              on;
@@ -74,7 +74,7 @@ server {
 
   # Proxy to app via unix socket
   location @app {
-    proxy_pass http://<%= app.name %>;
+    proxy_pass http://<%= app[:name] %>;
     proxy_redirect off;
 
     proxy_set_header Host               $host;
