@@ -55,7 +55,9 @@ end
 
 template "#{app.config_path}/database.yml" do
   source "database.yml.erb"
-  variables db_conf: db_conf
+  variables({
+                db_conf: db_conf
+            })
   owner app.user.name
   group app.user.group
   mode 0600
