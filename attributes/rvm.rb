@@ -16,7 +16,3 @@ default[:global_ruby_version] = 'ruby-2.0.0-p353'
 ### End of defaults for webapp::rvm. Overrides and such below:
 
 override[:rvm][:default_ruby] = node[:global_ruby_version]
-override[:rvm][:global_gems] = [
-  { name: 'bundler' },
-  { name: 'rake' }
-]

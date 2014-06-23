@@ -14,7 +14,7 @@ case app.type.downcase
   when 'rails', 'passenger'
     include_recipe 'webapp::passenger'
   when 'unicorn'
-    raise "Unicorn support not yet implemented"
+    include_recipe 'webapp::unicorn'
   when 'nodejs'
     raise "NodeJS support not yet implemented"
   else

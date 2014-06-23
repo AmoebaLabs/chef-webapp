@@ -13,8 +13,9 @@ node.override.rvm.user_installs = [{
   'global_gems'   => [
     { 'name'    => 'rubygems-bundler',
       'action'  => 'remove'
-    }
-  ] + app.gems.map {|g| { 'name' => g } }
+    },
+    { 'name' => 'rake' }
+  ] + app.gems.map {|g| g.class == String ? { 'name' => g } : g }
 }]
 
 include_recipe 'rvm::system'
