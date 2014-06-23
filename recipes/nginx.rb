@@ -24,6 +24,10 @@ template "#{node[:nginx][:dir]}/sites-available/#{app.name}.conf" do
   notifies :reload, resources(:service => "nginx")
 end
 
+nginx_site 'default' do
+  enable false
+end
+
 nginx_site "#{app.name}.conf"
 
 if app[:http_auth]
