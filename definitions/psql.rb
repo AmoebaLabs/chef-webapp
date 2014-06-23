@@ -8,12 +8,12 @@ define :psql_create_user do
   end
 end
 
-define :psql_create_database, :owner => nil, :encoding => 'utf8' do
+define :psql_create_database, :owner => nil, :encoding => 'utf8', :locale => 'en_US' do
   dbname = params[:name]
   owner  = params[:owner] or dbname
   db_check = psql_query "select count(*) from pg_database where datname='#{dbname}'"
   execute "create psql database '#{dbname}'" do
-    command   "createdb -E #{params[:encoding]} -O #{owner} #{dbname}"
+    command   "createdb -E #{params[:encoding]} --locale=#{params[:locale]}.#{params[:encoding]} -T template0 -O #{owner} #{dbname}"
     only_if   "test 0 -eq `#{db_check}`", :user => 'postgres'
     user      "postgres"
   end
