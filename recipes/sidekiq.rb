@@ -3,6 +3,8 @@
 # Recipe:: sidekiq
 #
 
+package 'at'
+
 worker_count = node[:application][:sidekiq][:worker_count]
 
 template "/etc/monit/conf.d/sidekiq_#{node[:application][:name]}.conf" do
